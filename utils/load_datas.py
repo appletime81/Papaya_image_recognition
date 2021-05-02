@@ -10,28 +10,32 @@ def load_datas(**kwargs):
     # get sample datas
     sample_img_paths = glob.glob(kwargs["sample_img_path"])
     img = cv2.imread(sample_img_paths[0])
-    img = cv2.resize(img, (256, 256))
+    # img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+    img = cv2.resize(img, (224, 224))
     x_train = img
     for i, sample_img_path in enumerate(sample_img_paths):
         if i > 0:
             # print(sample_img_path)
             img = cv2.imread(sample_img_path)
-            img = cv2.resize(img, (256, 256))
+            # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            img = cv2.resize(img, (224, 224))
             x_train = np.concatenate((x_train, img), axis=0)
-    x_train = x_train.reshape(len(sample_img_paths), 256, 256, 3)
+    x_train = x_train.reshape(len(sample_img_paths), 224, 224, 3)
 
     # get test datas
     test_img_paths = glob.glob(kwargs["test_img_path"])
     img = cv2.imread(test_img_paths[0])
-    img = cv2.resize(img, (256, 256))
+    # img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+    img = cv2.resize(img, (224, 224))
     x_test = img
     for i, test_img_path in enumerate(test_img_paths):
         if i > 0:
             # print(sample_img_path)
             img = cv2.imread(test_img_path)
-            img = cv2.resize(img, (256, 256))
+            # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            img = cv2.resize(img, (224, 224))
             x_test = np.concatenate((x_test, img), axis=0)
-    x_test = x_test.reshape(len(test_img_paths), 256, 256, 3)
+    x_test = x_test.reshape(len(test_img_paths), 224, 224, 3)
 
     # get train data labels
     label_dict = {
