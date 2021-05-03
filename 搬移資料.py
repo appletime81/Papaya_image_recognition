@@ -35,7 +35,7 @@ labels = []
 sample_df = pd.read_csv("Sample_Label.csv").values
 test_df = pd.read_csv("Test.csv").values
 for data in sample_df:
-    img_paths.append("Dataset/" + data[0].split("/")[1])
+    img_paths.append("Dataset/" + data[0].split("/")[1].replace("jpg", "JPG"))
     labels.append(data[1])
 
 for data in test_df:
