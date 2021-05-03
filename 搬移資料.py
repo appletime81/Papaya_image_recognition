@@ -50,4 +50,3 @@ images_info = {
 
 new_df = pd.DataFrame(images_info)
 new_df.to_csv("Label.csv", index=False)
-
