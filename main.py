@@ -8,10 +8,8 @@ start = time.time()
 
 # set global params
 params = {
-    "sample_img_path": "Sample/*JPG",
-    "test_img_path": "Test/*JPG",
-    "sample_csv_file": "Sample_Label.csv",
-    "test_csv_file": "Test.csv",
+    "train_csv_file": "train.csv",
+    "test_csv_file": "test.csv",
 }
 
 
@@ -35,7 +33,7 @@ def train_model(model, x_train, y_train, batch_size=32, epochs=50):
 
 if __name__ == "__main__":
     (x_train, y_train), (x_test, y_test) = load_datas(**params)
-    print(x_train.shape, x_test.shape)
+    print(x_train.shape, y_train.shape, x_test.shape, y_test.shape)
     x_train = x_train.astype("float32")
     x_test = x_test.astype("float32")
     x_train /= 255
@@ -46,8 +44,8 @@ if __name__ == "__main__":
 
     model = cnn_model()
     model = compile_model(model)
-    history, model = train_model(model, x_train, y_train, batch_size=8, epochs=50)
-    # model.save_weights(f"papaya_model_{datetime.now().strftime('%Y%m%H%M')}.h5")
+    history, model = train_model(model, x_train, y_train, batch_size=3, epochs=200)
+    model.save_weights(f"papaya_model_{datetime.now().strftime('%Y%m%H%M')}.h5")
     loss, accuracy = model.evaluate(x_test, y_test)
     print('Test:')
     print('Loss: %s\nAccuracy: %s' % (loss, accuracy))
