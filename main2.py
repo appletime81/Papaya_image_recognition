@@ -9,6 +9,7 @@ from tensorflow.keras.layers import concatenate, Activation
 from tensorflow.keras.optimizers import RMSprop, Adam
 from tensorflow.keras.callbacks import ModelCheckpoint, ReduceLROnPlateau
 from tensorflow.keras.callbacks import LearningRateScheduler
+from tensorflow.keras.callbacks import TensorBoard
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Model
 from tensorflow.keras.utils import to_categorical
@@ -19,7 +20,7 @@ from datetime import datetime
 from utils.load_datas import load_datas
 
 # training parameters
-batch_size = 16
+batch_size = 3
 epochs = 200
 data_augmentation = False
 
@@ -48,7 +49,7 @@ params = {
 (x_train, y_train), (x_test, y_test) = load_datas(**params)
 
 # input image dimensions
-input_shape = (32, 32, 3)
+input_shape = (64, 64, 3)
 
 # mormalize data
 x_train = x_train.astype('float32') / 255
@@ -172,12 +173,13 @@ lr_reducer = ReduceLROnPlateau(factor=np.sqrt(0.1),
                                cooldown=0,
                                patience=5,
                                min_lr=0.5e-6)
-
-callbacks = [checkpoint, lr_reducer, lr_scheduler]
+tensorboard_call_back = TensorBoard(log_dir="./log", histogram_freq=1, write_grads=True)
+callbacks = [checkpoint, lr_reducer, lr_scheduler, tensorboard_call_back]
 
 # run training, with or without data augmentation
 if not data_augmentation:
     print('Not using data augmentation.')
+
     model.fit(x_train, y_train,
               batch_size=batch_size,
               epochs=epochs,
@@ -220,7 +222,6 @@ else:
     #                    callbacks=callbacks)
 
 # score trained model
-model.save_weights(f"papaya_model_{datetime.now().strftime('%Y%m%H%M')}.h5")
 scores = model.evaluate(x_test, y_test, verbose=0)
 print('Test loss:', scores[0])
 print('Test accuracy:', scores[1])

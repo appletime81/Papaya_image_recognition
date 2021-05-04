@@ -20,7 +20,7 @@ def separate_img_datas_into_two_files(csv):
         info_dict[label] += [img_path]
 
     for key, value in info_dict.items():
-        test_img_paths = sample(value, 10)
+        test_img_paths = sample(value, 7)
         for file in value:
             if file not in test_img_paths:
                 train_data["img_path"] += [file]
