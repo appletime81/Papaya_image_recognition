@@ -18,7 +18,7 @@ def compile_model(model):
     return model
 
 
-def train_model(model, x_train, y_train, batch_size=32, epochs=50):
+def train_model(model, x_train, y_train, x_test, y_test, batch_size=32, epochs=50):
     tensorboard_call_back = TensorBoard(log_dir="./log", histogram_freq=1, write_grads=True)
     history = model.fit(
         x_train,
@@ -33,7 +33,7 @@ def train_model(model, x_train, y_train, batch_size=32, epochs=50):
 
 if __name__ == "__main__":
     (x_train, y_train), (x_test, y_test) = load_datas(**params)
-    # print(x_train.shape, y_train.shape, x_test.shape, y_test.shape)
+    print(x_train.shape, y_train.shape, x_test.shape, y_test.shape)
     x_train = x_train.astype("float32")
     x_test = x_test.astype("float32")
     x_train /= 255
@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     model = cnn_model()
     model = compile_model(model)
-    history, model = train_model(model, x_train, y_train, batch_size=3, epochs=50)
+    history, model = train_model(model, x_train, y_train, x_test, y_test, batch_size=103, epochs=100)
     model.save_weights(f"papaya_model_{datetime.now().strftime('%Y%m%H%M')}.h5")
     loss, accuracy = model.evaluate(x_test, y_test)
     print('Test:')

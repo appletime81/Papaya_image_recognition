@@ -20,7 +20,7 @@ def separate_img_datas_into_two_files(csv):
         info_dict[label] += [img_path]
 
     for key, value in info_dict.items():
-        test_img_paths = sample(value, 9)
+        test_img_paths = sample(value, 10)
         for file in value:
             if file not in test_img_paths:
                 train_data["img_path"] += [file]
@@ -38,4 +38,6 @@ def separate_img_datas_into_two_files(csv):
 
 if __name__ == "__main__":
     csv_file = "Label.csv"
+    # info_dict = {"A": 0, "B": 0, "C": 0}
     separate_img_datas_into_two_files(csv_file)
+    # cal_each_class_num(info_dict, csv_file)

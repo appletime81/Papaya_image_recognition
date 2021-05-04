@@ -11,7 +11,7 @@ from tensorflow.keras.layers import (
 
 def cnn_model():
     model = Sequential()
-    model.add(Conv2D(32, (3, 3), padding='same', input_shape=(32, 32, 3)))
+    model.add(Conv2D(32, (3, 3), padding='same', input_shape=(256, 256, 3)))
     model.add(Activation('relu'))
     model.add(Conv2D(32, (3, 3)))
     model.add(Activation('relu'))
@@ -31,5 +31,4 @@ def cnn_model():
     model.add(Dropout(0.5))
     model.add(Dense(3))
     model.add(Activation('softmax'))
-
     return model
