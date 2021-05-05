@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
     if test_data.shape == 1:
         model = dense_net_bc_model()
-        model.load_weights("saved_models/cifar10_densenet_model.55_95.23%.h5")
+        model.load_weights("cifar10_densenet_model.46_100%.h5")
         ans = model.predict(test_data)
         ans = ans.tolist()
         ans = map_dict[ans[0].index(max(ans[0]))]
