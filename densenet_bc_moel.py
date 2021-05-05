@@ -11,7 +11,7 @@ from tensorflow.keras.models import Model
 import cv2
 
 
-def DenseNet_BC_Model():
+def dense_net_bc_model():
     # training parameters
     batch_size = 3
     epochs = 200
@@ -36,29 +36,8 @@ def DenseNet_BC_Model():
 
     input_shape = (64, 64, 3)
 
-    def lr_schedule(epoch):
-        """Learning Rate Schedule
-        Learning rate is scheduled to be reduced after 80, 120, 160, 180 epochs.
-        Called automatically every epoch as part of callbacks during training.
-        # Arguments
-            epoch (int): The number of epochs
-        # Returns
-            lr (float32): learning rate
-        """
-        lr = 1e-3
-        if epoch > 180:
-            lr *= 0.5e-3
-        elif epoch > 160:
-            lr *= 1e-3
-        elif epoch > 120:
-            lr *= 1e-2
-        elif epoch > 80:
-            lr *= 1e-1
-        print('Learning rate: ', lr)
-        return lr
-
     # start model definition
-    # densenet CNNs (composite function) are made of BN-ReLU-Conv2D
+    # dense net CNNs (composite function) are made of BN-ReLU-Conv2D
     inputs = Input(shape=input_shape)
     x = BatchNormalization()(inputs)
     x = Activation('relu')(x)
@@ -116,21 +95,20 @@ def DenseNet_BC_Model():
 
     # instantiate and compile model
     # orig paper uses SGD but RMSprop works better for DenseNet
-    model = Model(inputs=inputs, outputs=outputs)
+    dense_net_model = Model(inputs=inputs, outputs=outputs)
 
-    return model
-
-
-if __name__ == "__main__":
-    # inference
-    test_data = cv2.imread("Dataset/257.JPG")
-    test_data = cv2.resize(test_data, (64, 64))
-    test_data = test_data.reshape(1, 64, 64, 3)
-    test_data = test_data.astype("float32")
-    test_data /= 255
+    return dense_net_model
 
 
-    model = DenseNet_BC_Model()
-    model.load_weights("saved_models/cifar10_densenet_model.55_95.23%.h5")
-    ans = model.predict(test_data)
-    print(ans)
+# if __name__ == "__main__":
+#     # inference
+#     test_data = cv2.imread("Dataset/257.JPG")
+#     test_data = cv2.resize(test_data, (64, 64))
+#     test_data = test_data.reshape(1, 64, 64, 3)
+#     test_data = test_data.astype("float32")
+#     test_data /= 255
+#
+#     model = dense_net_bc_model()
+#     model.load_weights("saved_models/cifar10_densenet_model.55_95.23%.h5")
+#     ans = model.predict(test_data)
+#     print(ans)
