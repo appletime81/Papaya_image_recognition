@@ -1,9 +1,11 @@
 import os
 import numpy as np
+import time
 
 from utils.load_datas import load_datas
 from densenet_bc_moel import dense_net_bc_model
 from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.callbacks import (
     ModelCheckpoint,
     ReduceLROnPlateau,
@@ -71,10 +73,22 @@ def training_processing(x_train, y_train, x_test, y_test):
 
 
 if __name__ == "__main__":
+    start = time.time()
+
     params = {
         "train_csv_file": "train.csv",
         "test_csv_file": "test.csv"
     }
 
     (x_train, y_train), (x_test, y_test) = load_datas(**params)
+    x_train = x_train.astype("float32")
+    x_test = x_test.astype("float32")
+    x_train /= 255
+    x_test /= 255
+
+    y_train = to_categorical(y_train, 3)
+    y_test = to_categorical(y_test, 3)
     training_processing(x_train, y_train, x_test, y_test)
+
+    # 總執行時間
+    print(f"總執行時間{time.time() - start}秒")
