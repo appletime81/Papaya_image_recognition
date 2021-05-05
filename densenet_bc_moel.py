@@ -13,27 +13,16 @@ import cv2
 
 def dense_net_bc_model():
     # training parameters
-    batch_size = 3
-    epochs = 200
     data_augmentation = False
 
     # network parameters
     num_classes = 3
     num_dense_blocks = 3
-    use_max_pool = False
-
-    # DenseNet-BC with dataset augmentation
-    # Growth rate   | Depth |  Accuracy (paper)| Accuracy (this)      |
-    # 12            | 100   |  95.49%          | 93.74%               |
-    # 24            | 250   |  96.38%          | requires big mem GPU |
-    # 40            | 190   |  96.54%          | requires big mem GPU |
     growth_rate = 12
     depth = 100
     num_bottleneck_layers = (depth - 4) // (2 * num_dense_blocks)
-
     num_filters_bef_dense_block = 2 * growth_rate
     compression_factor = 0.5
-
     input_shape = (64, 64, 3)
 
     # start model definition
@@ -41,10 +30,12 @@ def dense_net_bc_model():
     inputs = Input(shape=input_shape)
     x = BatchNormalization()(inputs)
     x = Activation('relu')(x)
-    x = Conv2D(num_filters_bef_dense_block,
-               kernel_size=3,
-               padding='same',
-               kernel_initializer='he_normal')(x)
+    x = Conv2D(
+        num_filters_bef_dense_block,
+        kernel_size=3,
+        padding='same',
+        kernel_initializer='he_normal'
+    )(x)
     x = concatenate([inputs, x])
 
     # stack of dense blocks bridged by transition layers
@@ -53,18 +44,22 @@ def dense_net_bc_model():
         for j in range(num_bottleneck_layers):
             y = BatchNormalization()(x)
             y = Activation('relu')(y)
-            y = Conv2D(4 * growth_rate,
-                       kernel_size=1,
-                       padding='same',
-                       kernel_initializer='he_normal')(y)
+            y = Conv2D(
+                4 * growth_rate,
+                kernel_size=1,
+                padding='same',
+                kernel_initializer='he_normal'
+            )(y)
             if not data_augmentation:
                 y = Dropout(0.2)(y)
             y = BatchNormalization()(y)
             y = Activation('relu')(y)
-            y = Conv2D(growth_rate,
-                       kernel_size=3,
-                       padding='same',
-                       kernel_initializer='he_normal')(y)
+            y = Conv2D(
+                growth_rate,
+                kernel_size=3,
+                padding='same',
+                kernel_initializer='he_normal'
+            )(y)
             if not data_augmentation:
                 y = Dropout(0.2)(y)
             x = concatenate([x, y])
@@ -77,10 +72,12 @@ def dense_net_bc_model():
         num_filters_bef_dense_block += num_bottleneck_layers * growth_rate
         num_filters_bef_dense_block = int(num_filters_bef_dense_block * compression_factor)
         y = BatchNormalization()(x)
-        y = Conv2D(num_filters_bef_dense_block,
-                   kernel_size=1,
-                   padding='same',
-                   kernel_initializer='he_normal')(y)
+        y = Conv2D(
+            num_filters_bef_dense_block,
+            kernel_size=1,
+            padding='same',
+            kernel_initializer='he_normal'
+        )(y)
         if not data_augmentation:
             y = Dropout(0.2)(y)
         x = AveragePooling2D()(y)
@@ -89,9 +86,11 @@ def dense_net_bc_model():
     # after average pooling, size of feature map is 1 x 1
     x = AveragePooling2D(pool_size=8)(x)
     y = Flatten()(x)
-    outputs = Dense(num_classes,
-                    kernel_initializer='he_normal',
-                    activation='softmax')(y)
+    outputs = Dense(
+        num_classes,
+        kernel_initializer='he_normal',
+        activation='softmax'
+    )(y)
 
     # instantiate and compile model
     # orig paper uses SGD but RMSprop works better for DenseNet
