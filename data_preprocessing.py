@@ -38,6 +38,5 @@ def separate_img_datas_into_two_files(csv):
 
 if __name__ == "__main__":
     csv_file = "Label.csv"
-    # info_dict = {"A": 0, "B": 0, "C": 0}
     separate_img_datas_into_two_files(csv_file)
-    # cal_each_class_num(info_dict, csv_file)
+
