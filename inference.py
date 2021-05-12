@@ -73,7 +73,6 @@ if __name__ == "__main__":
         model.load_weights("cifar10_densenet_model.46_100%.h5")
         time.sleep(0.1)
         for i in tqdm(range(test_data.shape[0]), ascii=True, desc="判讀進度", ncols=100):
-            time.sleep(0.01)
             temp_test_data = test_data[i].reshape(
                 1,
                 test_data[i].shape[0],
