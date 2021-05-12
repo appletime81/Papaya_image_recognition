@@ -90,7 +90,6 @@ if __name__ == "__main__":
     time.sleep(0.1)
 
     # 秀出與ground truth不一樣的判讀結果
-    print("\n")
     print("判讀錯誤的圖片".center(20, "*"))
     df = pd.read_csv("result.csv")
     for i in range(len(df)):
