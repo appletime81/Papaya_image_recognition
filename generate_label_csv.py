@@ -21,4 +21,3 @@ for img_path_and_label in img_path_and_label_list:
 
 infoDataFrame = pd.DataFrame(infoDict)
 infoDataFrame.to_csv("Label.csv", index=False)
-

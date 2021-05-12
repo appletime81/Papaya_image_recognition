@@ -39,4 +39,3 @@ def separate_img_datas_into_two_files(csv):
 if __name__ == "__main__":
     csv_file = "Label.csv"
     separate_img_datas_into_two_files(csv_file)
-
