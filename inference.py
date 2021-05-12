@@ -4,6 +4,7 @@ import pandas as pd
 import time
 
 from glob import glob
+from tqdm import tqdm
 from densenet_bc_moel import dense_net_bc_model
 
 
@@ -11,6 +12,7 @@ def load_for_one_folder(folder_path):
     img_paths = glob(f"{folder_path}/*.JPG")
 
     def sort_func(x):
+        x = x.replace("\\", "/")
         file_name = x.split("/")[1].split(".")[0]
         if len(x) == 1:
             return int(file_name)
@@ -68,7 +70,8 @@ if __name__ == "__main__":
     else:
         model = dense_net_bc_model()
         model.load_weights("cifar10_densenet_model.46_100%.h5")
-        for i in range(test_data.shape[0]):
+        time.sleep(0.1)
+        for i in tqdm(range(test_data.shape[0]), ascii=True, desc="判讀進度", ncols=100):
             temp_test_data = test_data[i].reshape(
                 1,
                 test_data[i].shape[0],
@@ -79,16 +82,18 @@ if __name__ == "__main__":
             ans = ans.tolist()
             ans = map_dict[ans[0].index(max(ans[0]))]
             result += [ans]
-            if i == test_data.shape[0] - 1:
-                print(f"判讀進度: 100%")
-            else:
-                print(f"判讀進度: {i*100/test_data.shape[0]}%")
+            # if i == test_data.shape[0] - 1:
+            #     print("判讀進度: 100%")
+            # else:
+            #     print("判讀進度: {:.1f}%".format(i*100/test_data.shape[0]))
 
     original_df["result"] = result
     original_df.to_csv("result.csv", index=False)
     time.sleep(0.1)
 
     # 秀出與ground truth不一樣的判讀結果
+    print("\n")
+    print("判讀錯誤的圖片".center(20, "*"))
     df = pd.read_csv("result.csv")
     for i in range(len(df)):
         if df["label"][i] != df["result"][i]:

@@ -8,8 +8,6 @@ from tensorflow.keras.layers import Input, Flatten, Dropout
 from tensorflow.keras.layers import concatenate, Activation
 from tensorflow.keras.models import Model
 
-import cv2
-
 
 def dense_net_bc_model():
     # training parameters
