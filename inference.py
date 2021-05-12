@@ -49,6 +49,7 @@ def load_for_one_file(file_path):
 
 
 if __name__ == "__main__":
+    start = time.time()
     map_dict = {
         0: "A",
         1: "B",
@@ -71,7 +72,7 @@ if __name__ == "__main__":
         model = dense_net_bc_model()
         model.load_weights("cifar10_densenet_model.46_100%.h5")
         time.sleep(0.1)
-        for i in tqdm(range(test_data.shape[0]), ascii=True, desc="\n判讀進度", ncols=100):
+        for i in tqdm(range(test_data.shape[0]), ascii=True, desc="判讀進度", ncols=100):
             time.sleep(0.01)
             temp_test_data = test_data[i].reshape(
                 1,
@@ -95,3 +96,5 @@ if __name__ == "__main__":
     for i in range(len(df)):
         if df["label"][i] != df["result"][i]:
             print(df["img_path"][i])
+
+    print(f"總執行時間{time.time() - start}秒")
