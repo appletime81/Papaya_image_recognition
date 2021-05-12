@@ -82,10 +82,6 @@ if __name__ == "__main__":
             ans = ans.tolist()
             ans = map_dict[ans[0].index(max(ans[0]))]
             result += [ans]
-            # if i == test_data.shape[0] - 1:
-            #     print("判讀進度: 100%")
-            # else:
-            #     print("判讀進度: {:.1f}%".format(i*100/test_data.shape[0]))
 
     original_df["result"] = result
     original_df.to_csv("result.csv", index=False)
